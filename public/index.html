@@ -65,6 +65,7 @@
                     })
             )
         await Promise.all(requestList)//保证所有的切片都已经传输完毕
+        merge(files.size, files.name)
     }
 
     // 请求函数
@@ -94,6 +95,19 @@
         // 发请求，调用函数
         uploadFile(uploadList);
     })
+
+    // 通知后端去做切片合并
+    function merge(size, fileName) {
+        axiosRequest({
+            method: 'post',
+            url: 'http://localhost:3000/merge', // 后端合并请求
+            data: JSON.stringify({
+                size,
+                fileName
+            }),
+        })
+    }
+
 
 </script>
 </body>
